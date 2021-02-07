@@ -1,5 +1,6 @@
 class Movie < ActiveRecord::Base
   def self.all_ratings
-    self.select(:rating).distinct.order(:rating).pluck(:rating)
+    x = self.select(:rating).distinct.order(:rating)
+    return x.pluck(:rating)
   end
 end
