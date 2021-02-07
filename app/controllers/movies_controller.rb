@@ -10,9 +10,9 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @ratings_to_show = []
     
-    if params[:ratings] == nil
-      if session[:ratings] == nil
-        session[:ratings] = {} #empty r
+    if params[:ratings].nil?
+      if session[:ratings].nil?
+        session[:ratings] = {}
         Movie.all_ratings.each do |r|
           session[:ratings][r] = 1
         end
@@ -20,19 +20,19 @@ class MoviesController < ApplicationController
       @ratings_to_show = session[:ratings].keys
     else
       session[:ratings] = params[:ratings]
-      @ratings_to_show = session[:ratings].keys
+      @ratings_to_show = params[:ratings].keys
     end
     
-    if params[:ratings] == nil
+    if params[:ratings].nil?
       redirect_to movies_url(sort_by: params[:sort_by], ratings: session[:ratings])
     end
     
     if session[:ratings]
+      #redirect_to movies_path(ratings: session[:ratings])
       @movies = Movie.where(rating: session[:ratings].keys)
     else
       @movies = Movie.where(rating: params[:ratings].keys)
     end
-    
     if params[:sort_by].to_s == 'title'
       @sort_by_title = "hilite"
       @movies = @movies.all.order(params[:sort_by])
@@ -40,7 +40,6 @@ class MoviesController < ApplicationController
       @sort_by_release_date = "hilite"
       @movies = @movies.all.order(params[:sort_by])
     end
-    
   end
 
   def new
