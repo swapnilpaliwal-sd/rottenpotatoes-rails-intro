@@ -13,9 +13,8 @@ class MoviesController < ApplicationController
     if params[:ratings] == nil
       if session[:ratings] == nil
         session[:ratings] = {}
-        Movie.all_ratings.each do |r|
-          session[:ratings][r] = 1
-        end
+        Movie.all_ratings.each do {
+          |r| session[:ratings][r] = 1}
       end
       @ratings_to_show = session[:ratings].keys
     else
@@ -23,7 +22,7 @@ class MoviesController < ApplicationController
       @ratings_to_show = params[:ratings].keys
     end
     
-    if params[:ratings].nil?
+    if params[:ratings] == nil
       redirect_to movies_url(sort_by: params[:sort_by], ratings: session[:ratings])
     end
     
