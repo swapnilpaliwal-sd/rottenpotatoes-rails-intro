@@ -10,8 +10,8 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @ratings_to_show = []
     
-    if params[:ratings].nil?
-      if session[:ratings].nil?
+    if params[:ratings] == nil
+      if session[:ratings] == nil
         session[:ratings] = {}
         Movie.all_ratings.each do |r|
           session[:ratings][r] = 1
@@ -20,14 +20,14 @@ class MoviesController < ApplicationController
       @ratings_to_show = session[:ratings].keys
     else
       session[:ratings] = params[:ratings]
-      @ratings_to_show = params[:ratings].keys
+      @ratings_to_show = session[:ratings].keys
     end
     
-    if params[:ratings].nil?
+    if params[:ratings] == nil
       redirect_to movies_url(sort_by: params[:sort_by], ratings: session[:ratings])
     end
     
-    if session[:ratings]
+    if session[:ratings]!=nil
       #redirect_to movies_path(ratings: session[:ratings])
       @movies = Movie.where(rating: session[:ratings].keys)
     else
