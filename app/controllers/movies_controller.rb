@@ -27,27 +27,19 @@ class MoviesController < ApplicationController
       redirect_to movies_url(sort_by: params[:sort_by], ratings: session[:ratings])
     end
     
-    if params[:sort_by].to_s == 'title'
-      @sort_by_title = "hilite"
-      @movies = @movies.all.order(params[:sort_by])
-    elsif params[:sort_by].to_s == 'release_date'
-      @sort_by_release_date = "hilite"
-      @movies = @movies.all.order(params[:sort_by])
-    endif params[:sort_by].to_s == 'title'
-      @sort_by_title = "hilite"
-      @movies = @movies.all.order(params[:sort_by])
-    elsif params[:sort_by].to_s == 'release_date'
-      @sort_by_release_date = "hilite"
-      @movies = @movies.all.order(params[:sort_by])
-    end
-    
     if session[:ratings]
       @movies = Movie.where(rating: session[:ratings].keys)
     else
       @movies = Movie.where(rating: params[:ratings].keys)
     end
     
-    
+    if params[:sort_by].to_s == 'title'
+      @sort_by_title = "hilite"
+      @movies = @movies.all.order(params[:sort_by])
+    elsif params[:sort_by].to_s == 'release_date'
+      @sort_by_release_date = "hilite"
+      @movies = @movies.all.order(params[:sort_by])
+    end
     
   end
 
