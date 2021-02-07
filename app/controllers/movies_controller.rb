@@ -7,7 +7,56 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    @ratings_to_show = []
+    
+    if params[:ratings].nil?
+      if session[:ratings].nil?
+        session[:ratings] = {}
+        Movie.all_ratings.each do |r|
+          session[:ratings][r] = 1
+        end
+      end
+      @ratings_to_show = session[:ratings].keys
+    else
+      session[:ratings] = params[:ratings]
+      @ratings_to_show = params[:ratings].keys
+    end
+
+    # Deal with sorting params
+    #if params[:sort_by].nil?
+    #  if session[:sort_by].nil?
+    #    session[:sort_by] = "id"
+    #  end
+    #else
+    #  session[:sort_by] = params[:sort_by]
+    #end
+
+    #if (params[:ratings] || session[:filtered_rating])
+    #  @ratings_to_show = ratings
+    #elsif
+    #  @ratings_to_show = []
+    #end
+    
+   
+    
+    if params[:ratings].nil?
+      redirect_to movies_url(sort_by: params[:sort_by], ratings: session[:ratings])
+    end
+    
+    if session[:ratings]
+      #redirect_to movies_path(ratings: session[:ratings])
+      @movies = Movie.where(rating: session[:ratings].keys)
+    else
+      @movies = Movie.where(rating: params[:ratings].keys)
+    end
+    if params[:sort_by].to_s == 'title'
+      @sort_by_title = "hilite"
+      @movies = @movies.all.order(params[:sort_by])
+    elsif params[:sort_by].to_s == 'release_date'
+      @sort_by_release_date = "hilite"
+      @movies = @movies.all.order(params[:sort_by])
+    end
   end
 
   def new
