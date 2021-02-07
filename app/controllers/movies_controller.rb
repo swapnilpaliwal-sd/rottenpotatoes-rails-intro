@@ -10,17 +10,17 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @ratings_to_show = []
     
-    if params[:ratings] == nil
+    if params[:ratings] == nil 
       if session[:ratings] == nil
-        session[:ratings] = {}
+        session[:ratings] = {} #empty assigned
         Movie.all_ratings.each do |r|
           session[:ratings][r] = 1
         end
       end
-      @ratings_to_show = session[:ratings].keys
+      @ratings_to_show = session[:ratings].keys #selecting ratings to dsply
     else
       session[:ratings] = params[:ratings]
-      @ratings_to_show = session[:ratings].keys
+      @ratings_to_show = session[:ratings].keys #assigning key value
     end
     
     if params[:ratings] == nil
@@ -28,17 +28,16 @@ class MoviesController < ApplicationController
     end
     
     if session[:ratings]!=nil
-      #redirect_to movies_path(ratings: session[:ratings])
-      @movies = Movie.where(rating: session[:ratings].keys)
+      @movies = Movie.where(rating: session[:ratings].keys) #select values when it is not empty
     else
       @movies = Movie.where(rating: params[:ratings].keys)
     end
     if params[:sort_by].to_s == 'title'
-      @sort_by_title = "hilite"
+      @sort_by_title = "hilite" #one of the 2 additional CSS classes in use 'hilite'
       @movies = @movies.all.order(params[:sort_by])
     elsif params[:sort_by].to_s == 'release_date'
       @sort_by_release_date = "hilite"
-      @movies = @movies.all.order(params[:sort_by])
+      @movies = @movies.all.order(params[:sort_by]) #movies are ordered by selection which is highlighted by yellow color
     end
   end
 
