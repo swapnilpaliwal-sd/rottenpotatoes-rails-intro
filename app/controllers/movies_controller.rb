@@ -11,16 +11,16 @@ class MoviesController < ApplicationController
     @ratings_to_show = []
     
     if params[:ratings] == nil 
-      if session[:ratings] == nil
+      if session[:ratings] == nil #check if session n params with ratings attr are empty
         session[:ratings] = {} #empty assigned
         Movie.all_ratings.each do |r|
-          session[:ratings][r] = 1
+          session[:ratings][r] = 1 
         end
       end
       @ratings_to_show = session[:ratings].keys #selecting ratings to dsply
     else
       session[:ratings] = params[:ratings]
-      @ratings_to_show = session[:ratings].keys #assigning key value
+      @ratings_to_show = session[:ratings].keys #assigning key value which affects the dsply
     end
     
     if params[:ratings] == nil
