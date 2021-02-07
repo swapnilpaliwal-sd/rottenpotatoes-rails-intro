@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
     
     if params[:ratings] == nil
       if session[:ratings] == nil
-        session[:ratings] = {}
+        session[:ratings] = {} #empty r
         Movie.all_ratings.each do |r|
           session[:ratings][r] = 1
         end
@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
       @ratings_to_show = session[:ratings].keys
     else
       session[:ratings] = params[:ratings]
-      @ratings_to_show = params[:ratings].keys
+      @ratings_to_show = session[:ratings].keys
     end
     
     if params[:ratings] == nil
